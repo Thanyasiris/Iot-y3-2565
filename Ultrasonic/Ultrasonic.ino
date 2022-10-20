@@ -16,8 +16,8 @@ int ledPin1 = 8;
 int ledPin2 = 9;
 int ledPin3 = 10;
 int ledPin4 = 11;
-//แบ่งระดับระยะของ distance เป็น 4 ระยะ วัดระยะระยะห่างจากอุปกรณ์ได้สูงสุด 450cm จึงให้ con = 450/4
-float con = 450/4;
+//ระยะห่างสูงสุดที่วัดได้
+int max = 450;
 
 void setup() {
   // put your setup code here, to run once:
@@ -34,7 +34,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  long duration, distance;
+  long duration, distance, distanceInch;
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIG_PIN,HIGH);
@@ -53,10 +53,10 @@ void loop() {
   distance = (duration/2) / 29.1;
 
   //แสดงค่า distance แบบ inch
-  int distanceInch = (duration/2) / 74;
+  distanceInch = (duration/2) / 74;
   Serial.print("distance(inch): ");
   Serial.println(distanceInch);
-  if(distance < con ){
+  if(distance < max*0.25 ){
     //ระยะที่ 1 มีค่าระยะห่างจากวัตถุ อยู่ที่ 0-25%ของระยะห่างสูงสุด  ให้ LED1 ติด / LED2, LED3, LED4 ดับ
     digitalWrite(ledPin1, HIGH);
     digitalWrite(ledPin2, LOW);
@@ -64,7 +64,7 @@ void loop() {
     digitalWrite(ledPin4, LOW);
     Serial.println("LED ON 1 \n");
   }
-  else if(distance < con*2){
+  else if(distance < max*0.50){
     //ระดับที่ 2 มีค่าระยะห่างจากวัตถุ อยู่ที่ 26%-50%ของระยะห่างสูงสุด ให้ LED1, LED2 ติด / LED3, LED4 ดับ
     digitalWrite(ledPin1, HIGH);
     digitalWrite(ledPin2, HIGH);
@@ -73,7 +73,7 @@ void loop() {
     Serial.println("LED ON 1,2 \n");
     Serial.println();
   }
-  else if(distance < con*3){
+  else if(distance < max*0.75){
     //ระดับที่ 3 มีค่าระยะห่างจากวัตถุ อยู่ที่ 51%-75%ของระยะห่างสูงสุด ให้ LED1, LED2, LED3 ติด / LED4 ดับ
     digitalWrite(ledPin1, HIGH);
     digitalWrite(ledPin2, HIGH);
